@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBA Thesis Proposal — Conceptual Framework | Tarciana Caricio Carlucci</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F5F5F5; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const { useState } = React;
+
+// ─── ATACANA DESIGN SYSTEM ───
+const C = {
+  ci: "#B22028", str: "#003366", ai: "#3F3F3F", neu: "#D9D9D9",
+  txt: "#767171", pg: "#BCBCBC", bg: "#F5F5F5", lbg: "#FAFAFA", wh: "#FFFFFF",
+  traditional: "#B22028", aiAccent: "#003366", aiDim: "rgba(0,51,102,0.06)",
+  catActors: "#003366", catPhysical: "#4A7FB5", catStructures: "#8C8C8C", catCulture: "#B22028",
+};
+const F = {
+  t: "'Century Gothic','Gill Sans','Trebuchet MS',sans-serif",
+  b: "Calibri,'Trebuchet MS',sans-serif",
+};
+
+const traditionalSteps = [
+  { id: "req", label: "Intelligence Requirements", sub: "KITs & KIQs definition" },
+  { id: "plan", label: "Collection Plan", sub: "Source identification & gap analysis" },
+  { id: "collect", label: "Secondary + Human Collection", sub: "Conferences, patents, publications, networks" },
+  { id: "process", label: "Processing & Analyzing", sub: "Validate, decompose, recombine data" },
+  { id: "review", label: "CI Review & Output", sub: "Reports, presentations, briefings" },
+  { id: "strategy", label: "Strategy", sub: "Decision-making & action" },
+];
+
+const aiSteps = [
+  { id: "goals", label: "Client Goals, Vision & Assumptions", sub: "Strategic context codified as AI operating parameters",
+    detail: "Everything starts with a deep understanding of the client's strategic context — their competitive landscape, therapeutic priorities, and key assumptions about the market. These get codified into the AI system, becoming the foundation for what it monitors and how it interprets signals.", isNew: true },
+  { id: "continuous", label: "Continuous AI Scanning & Filtering", sub: "Automated, always-on monitoring across sources",
+    detail: "AI continuously scans thousands of sources — news, regulatory filings, clinical trial registries, patent databases — filtering noise and surfacing signals aligned with the client's intelligence requirements. This replaces periodic manual collection with persistent, scalable coverage.", isNew: false },
+  { id: "contextualize", label: "AI-Powered Contextualization", sub: "Custom implications & pattern recognition",
+    detail: "The AI doesn't just deliver raw news — it interprets each signal in the context of the client's specific competitive position and strategic assumptions. It identifies patterns across seemingly unrelated events and surfaces custom implications tailored to the client's situation.", isNew: true },
+  { id: "integrate", label: "Knowledge Integration Hub", sub: "Stakeholder triangulation & knowledge sharing",
+    detail: "The platform enables triangulation of dispersed knowledge from internal teams (CI, brand, medical affairs, commercial) and external stakeholders (KOLs, academic partners, institutions). It facilitates knowledge sharing across structural holes, acting as a knowledge broker that connects insights from multiple sources into a coherent strategic picture.", isNew: true },
+  { id: "learn", label: "System Learning & Adaptation", sub: "Assumptions update, parameters evolve dynamically",
+    detail: "The system learns continuously from user interactions, feedback on relevance, and new intelligence. Monitoring parameters, competitive assumptions, and alert thresholds update dynamically — the system gets smarter with every interaction cycle.", isNew: true },
+  { id: "action", label: "Hybrid Agency & Strategic Action", sub: "Human-AI conjoined decision-making driving strategy",
+    detail: "Intelligence only creates value when it shapes decisions and drives action. This step is where hybrid agency emerges — humans and AI jointly interpreting signals, weighing options, and committing to strategic moves. The cycle from knowledge to action compresses from weeks to hours, with human judgment and AI pattern recognition reinforcing each other.", isNew: true },
+];
+
+const veronaCategories = [
+  { id: "actors", label: "Actors", color: C.catActors,
+    traditional: "CI analysts, scientists at conferences, sales reps gathering market intel, external CI firms for primary intelligence collection",
+    aiDriven: "CI platform users, brand teams, therapeutic area leads — operating along an augmentation-to-automation continuum. Depending on task complexity and knowledge requirements, humans choose how to split the labor with AI. External CI firms remain essential for primary intelligence collection.",
+    researchQ: "How do organizations rethink the workflow and division of labor between humans and AI to optimize CI outcomes? How do actors set strategic ambition, define parameters, and evaluate quality — while leveraging AI for speed, consistency, and pattern discovery?" },
+  { id: "physical", label: "Physical Resources", color: C.catPhysical,
+    traditional: "Patent databases, market reports, conference proceedings, clinical trial databases (ClinicalTrials.gov, Citeline), biomedical literature platforms (PubMed), market intelligence platforms (IQVIA), internal paper files",
+    aiDriven: "AI platform infrastructure, integrated dashboards, real-time data pipelines, API connections to regulatory, clinical, and commercial databases",
+    researchQ: "What digital infrastructure enables knowledge absorption? How does the AI platform integrate with existing data ecosystems and legacy systems?" },
+  { id: "structures", label: "Structures & Systems", color: C.catStructures,
+    traditional: "Centralized, decentralized, or hybrid CI function; periodic review cycles; manual distribution lists; KIT/KIQ processes; functional silos",
+    aiDriven: "Automated news capture, categorization, triage, and alert sharing; cross-functional intelligence dissemination; continuous feedback loops; platform governance — with CI potentially evolving into an organizational knowledge broker connecting insights across functions",
+    researchQ: "How do organizational structure, budget allocation, and time investment shape AI-driven CI integration? What configurations enable the CI function to evolve from report production to knowledge brokerage?" },
+  { id: "culture", label: "Culture", color: C.catCulture,
+    traditional: "CI values are typically aligned with broad company values; often perceived as 'nice to have', siloed in strategy, limited executive sponsorship",
+    aiDriven: "Data-driven decision culture, trust in AI-generated insights, openness to continuous learning, willingness to update strategic assumptions, agile ways of working, accelerated decision-to-action cycles, cross-functional collaboration",
+    researchQ: "Do people trust and act on AI-generated intelligence? Is there a culture of evidence-based strategy, agility, and cross-functional collaboration that enables absorption and timely action?" },
+];
+
+const capabilityMapping = [
+  { capability: "Knowledge Creation & Absorption", color: C.str, traditionalRange: [0, 2], aiRange: [0, 2],
+    description: "How external knowledge is generated, acquired, and brought into the organization" },
+  { capability: "Knowledge Integration", color: C.ci, traditionalRange: [3, 4], aiRange: [3, 3],
+    description: "How dispersed knowledge gets combined into actionable intelligence" },
+  { capability: "Knowledge Reconfiguration", color: C.ai, traditionalRange: [5, 5], aiRange: [4, 5],
+    description: "How the organization adapts its CI practices and strategic responses over time" },
+];
+
+function SectionHeader({ color, label, citation, number }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+      {number && (
+        <div style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, background: color,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: F.t, fontSize: 13, fontWeight: 700, color: C.wh }}>{number}</div>
+      )}
+      <div>
+        <span style={{ fontFamily: F.t, fontSize: 13, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color }}>{label}</span>
+        {citation && <span style={{ fontFamily: F.b, fontSize: 10, color: C.pg, marginLeft: 8, fontStyle: "italic" }}>{citation}</span>}
+      </div>
+    </div>
+  );
+}
+
+function StepCard({ step, isActive, isHighlighted, highlightColor, onClick, showNew, layerColor }) {
+  const borderColor = isActive ? layerColor : isHighlighted ? highlightColor : showNew ? `${C.ci}60` : C.neu;
+  return (
+    <div onClick={onClick} style={{
+      background: isActive ? `${layerColor}10` : isHighlighted ? `${highlightColor}08` : C.wh,
+      border: `1.5px solid ${borderColor}`, borderRadius: 6, padding: "14px 10px 12px", textAlign: "center",
+      cursor: onClick ? "pointer" : "default", transition: "all 0.2s ease", position: "relative", minHeight: 86,
+      display: "flex", flexDirection: "column", justifyContent: "center",
+      boxShadow: isActive ? `0 2px 12px ${layerColor}20` : "0 1px 4px rgba(0,0,0,0.06)",
+    }}>
+      {showNew && (
+        <div style={{ position: "absolute", top: -8, right: 8, fontFamily: F.t, fontSize: 7, fontWeight: 700,
+          letterSpacing: 1.2, textTransform: "uppercase", color: C.wh, background: C.ci, padding: "2px 7px", borderRadius: 3 }}>New</div>
+      )}
+      <div style={{ fontFamily: F.b, fontSize: 11, fontWeight: 700, lineHeight: 1.35, marginBottom: 5,
+        color: isActive ? layerColor : isHighlighted ? highlightColor : C.txt }}>{step.label}</div>
+      <div style={{ fontFamily: F.b, fontSize: 9, color: C.pg, lineHeight: 1.4 }}>{step.sub}</div>
+    </div>
+  );
+}
+
+function App() {
+  const [activeAiStep, setActiveAiStep] = useState(null);
+  const [activeVerona, setActiveVerona] = useState(null);
+  const [activeCapability, setActiveCapability] = useState(null);
+
+  return (
+    <div style={{ background: C.bg, minHeight: "100vh", padding: "28px 20px", fontFamily: F.b, color: C.txt }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto" }}>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+            <div style={{ width: 5, height: 52, background: C.neu, marginTop: 2 }} />
+            <div>
+              <div style={{ fontFamily: F.t, fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: C.ci, fontWeight: 600, marginBottom: 6 }}>
+                DBA Thesis Proposal — Conceptual Framework</div>
+              <h1 style={{ fontFamily: F.t, fontSize: 22, fontWeight: 700, color: C.txt, margin: "0 0 6px", lineHeight: 1.25 }}>
+                From Traditional to AI-Driven Competitive Intelligence</h1>
+              <p style={{ fontFamily: F.b, fontSize: 12, color: C.pg, margin: 0, maxWidth: 800, lineHeight: 1.55 }}>
+                What organizational capabilities enable successful AI integration in competitive intelligence?</p>
+            </div>
+          </div>
+          <div style={{ writingMode: "vertical-rl", fontFamily: F.b, fontSize: 9, color: C.ci, fontWeight: 600, letterSpacing: 1.5 }}>CONFIDENTIAL</div>
+        </div>
+
+        <SectionHeader color={C.traditional} label="Traditional CI Process" citation="Carlucci, Page & Finegold, 2005 — Nature Biotechnology" number="1" />
+        <div style={{ position: "relative", marginBottom: 48 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 }}>
+            {traditionalSteps.map((step, i) => {
+              const isHighlighted = activeCapability !== null && i >= capabilityMapping[activeCapability].traditionalRange[0] && i <= capabilityMapping[activeCapability].traditionalRange[1];
+              return <StepCard key={step.id} step={step} isHighlighted={isHighlighted}
+                highlightColor={activeCapability !== null ? capabilityMapping[activeCapability].color : C.pg} layerColor={C.traditional} />;
+            })}
+          </div>
+          <div style={{ position: "absolute", bottom: -24, left: "12%", right: "12%", height: 20,
+            borderBottom: `1.5px dashed ${C.pg}`, borderLeft: `1.5px dashed ${C.pg}`, borderRight: `1.5px dashed ${C.pg}`, borderRadius: "0 0 10px 10px" }}>
+            <div style={{ position: "absolute", left: -5, top: -5, color: C.pg, fontSize: 9 }}>▲</div>
+            <div style={{ position: "absolute", bottom: -13, left: "50%", transform: "translateX(-50%)",
+              fontFamily: F.b, fontSize: 8, color: C.pg, whiteSpace: "nowrap", letterSpacing: 0.5 }}>
+              Periodic feedback — additional collection if gaps remain</div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, margin: "28px 0 20px" }}>
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, ${C.str}40)` }} />
+          <div style={{ padding: "5px 18px", background: C.wh, borderRadius: 4, border: `1.5px solid ${C.str}` }}>
+            <span style={{ fontFamily: F.t, fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.str }}>AI Transformation</span>
+          </div>
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, ${C.str}40)` }} />
+        </div>
+
+        <SectionHeader color={C.str} label="AI-Driven CI Flow" citation="Atacana Platform" number="2" />
+        <div style={{ position: "relative", marginBottom: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 }}>
+            {aiSteps.map((step, i) => {
+              const isActive = activeAiStep === i;
+              const isHighlighted = activeCapability !== null && i >= capabilityMapping[activeCapability].aiRange[0] && i <= capabilityMapping[activeCapability].aiRange[1];
+              return <StepCard key={step.id} step={step} isActive={isActive} isHighlighted={isHighlighted}
+                highlightColor={activeCapability !== null ? capabilityMapping[activeCapability].color : C.str}
+                onClick={() => setActiveAiStep(isActive ? null : i)} showNew={step.isNew} layerColor={C.str} />;
+            })}
+          </div>
+          <div style={{ position: "absolute", bottom: -24, left: "6%", right: "6%", height: 20,
+            borderBottom: `2px solid ${C.str}`, borderLeft: `2px solid ${C.str}`, borderRight: `2px solid ${C.str}`, borderRadius: "0 0 12px 12px" }}>
+            <div style={{ position: "absolute", left: -5, top: -6, color: C.str, fontSize: 10 }}>▲</div>
+            <div style={{ position: "absolute", right: -5, top: -6, color: C.str, fontSize: 10, transform: "scaleX(-1)" }}>▲</div>
+            <div style={{ position: "absolute", bottom: -14, left: "50%", transform: "translateX(-50%)",
+              fontFamily: F.b, fontSize: 9, color: C.str, whiteSpace: "nowrap", fontWeight: 600, letterSpacing: 0.5 }}>
+              Continuous, bidirectional learning loop — system adapts dynamically with every interaction</div>
+          </div>
+        </div>
+
+        {activeAiStep !== null && (
+          <div style={{ marginTop: 40, padding: "16px 20px", background: C.wh, borderRadius: 6,
+            border: `1.5px solid ${C.str}`, borderLeft: `4px solid ${C.str}`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+            <div style={{ fontFamily: F.t, fontSize: 14, fontWeight: 700, color: C.str, marginBottom: 6 }}>{aiSteps[activeAiStep].label}</div>
+            <div style={{ fontFamily: F.b, fontSize: 12, color: C.txt, lineHeight: 1.7 }}>{aiSteps[activeAiStep].detail}</div>
+          </div>
+        )}
+
+        <div style={{ marginTop: 48 }}>
+          <SectionHeader color={C.ai} label="Dynamic Capabilities Mapping" citation="Verona & Ravasi, 2003 — click to highlight in flows above" number="" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            {capabilityMapping.map((cap, i) => {
+              const isActive = activeCapability === i;
+              return (
+                <div key={cap.capability} onClick={() => setActiveCapability(isActive ? null : i)} style={{
+                  background: isActive ? `${cap.color}08` : C.wh, border: `1.5px solid ${isActive ? cap.color : C.neu}`,
+                  borderRadius: 6, padding: "14px 16px", cursor: "pointer", transition: "all 0.2s ease",
+                  boxShadow: isActive ? `0 2px 12px ${cap.color}18` : "0 1px 4px rgba(0,0,0,0.06)" }}>
+                  <div style={{ fontFamily: F.t, fontSize: 12, fontWeight: 700, color: isActive ? cap.color : C.txt, marginBottom: 4 }}>{cap.capability}</div>
+                  <div style={{ fontFamily: F.b, fontSize: 10, color: C.pg, lineHeight: 1.5 }}>{cap.description}</div>
+                  <div style={{ marginTop: 6, fontFamily: F.b, fontSize: 9, color: isActive ? cap.color : C.pg, fontStyle: "italic" }}>
+                    {isActive ? "Click again to clear highlighting ↑" : "Click to highlight corresponding steps ↑"}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ marginTop: 40 }}>
+          <SectionHeader color={C.ci} label="Organizational Resource Categories — Analytical Lens" citation="Verona & Ravasi, 2003" number="3" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+            {veronaCategories.map((cat) => {
+              const isActive = activeVerona === cat.id;
+              return (
+                <div key={cat.id} onClick={() => setActiveVerona(isActive ? null : cat.id)} style={{
+                  background: isActive ? `${cat.color}06` : C.wh, border: `1.5px solid ${isActive ? cat.color : C.neu}`,
+                  borderRadius: 6, padding: "16px 18px", cursor: "pointer", transition: "all 0.2s ease",
+                  boxShadow: isActive ? `0 2px 12px ${cat.color}12` : "0 1px 4px rgba(0,0,0,0.06)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: isActive ? 14 : 6 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: cat.color, flexShrink: 0 }} />
+                    <div style={{ fontFamily: F.t, fontSize: 13, fontWeight: 700, color: isActive ? cat.color : C.txt }}>{cat.label}</div>
+                  </div>
+                  {!isActive ? (
+                    <div style={{ fontFamily: F.b, fontSize: 10, color: C.pg, lineHeight: 1.5 }}>Click to explore traditional vs. AI-driven</div>
+                  ) : (
+                    <div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+                        <div>
+                          <div style={{ fontFamily: F.b, fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase",
+                            color: C.ci, marginBottom: 5, display: "flex", alignItems: "center", gap: 5 }}>
+                            <div style={{ width: 12, height: 3, background: C.ci, borderRadius: 2 }} />Traditional</div>
+                          <div style={{ fontFamily: F.b, fontSize: 11, color: C.txt, lineHeight: 1.55 }}>{cat.traditional}</div>
+                        </div>
+                        <div>
+                          <div style={{ fontFamily: F.b, fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase",
+                            color: C.str, marginBottom: 5, display: "flex", alignItems: "center", gap: 5 }}>
+                            <div style={{ width: 12, height: 3, background: C.str, borderRadius: 2 }} />AI-Driven</div>
+                          <div style={{ fontFamily: F.b, fontSize: 11, color: C.txt, lineHeight: 1.55 }}>{cat.aiDriven}</div>
+                        </div>
+                      </div>
+                      <div style={{ padding: "10px 14px", background: C.lbg, borderRadius: 4, borderLeft: `3px solid ${cat.color}` }}>
+                        <div style={{ fontFamily: F.t, fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase",
+                          color: cat.color, marginBottom: 4 }}>Research Question</div>
+                        <div style={{ fontFamily: F.b, fontSize: 11, color: C.txt, lineHeight: 1.55, fontStyle: "italic" }}>{cat.researchQ}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ marginTop: 32, padding: "18px 22px", background: C.wh, borderRadius: 6,
+          border: `1.5px solid ${C.str}`, borderLeft: `5px solid ${C.ci}`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+          <div style={{ fontFamily: F.t, fontSize: 14, fontWeight: 700, color: C.ci, marginBottom: 8 }}>
+            The Key Shift: From Fragmented &amp; Outdated → Integrated &amp; Actionable</div>
+          <div style={{ fontFamily: F.b, fontSize: 12, color: C.txt, lineHeight: 1.75, maxWidth: 960 }}>
+            The traditional CI process is fundamentally <strong style={{ color: C.ci }}>manual and periodic</strong> —
+            intelligence becomes outdated quickly, knowledge remains fragmented across silos, and the gap between
+            insight and strategic action is often too wide for timely response.
+            The AI-driven model <strong style={{ color: C.str }}>empowers teams with continuously updated, integrated knowledge</strong> —
+            enabling confident, evidence-based decision-making at the speed the competitive landscape demands.
+            Verona &amp; Ravasi's (2003) four resource categories provide the analytical lens to examine{" "}
+            <em>why</em> some organizations successfully make this transition while others don't.
+          </div>
+        </div>
+
+        <div style={{ marginTop: 14, padding: "14px 20px", background: C.bg, borderRadius: 4, border: `1px solid ${C.neu}` }}>
+          <div style={{ fontFamily: F.t, fontSize: 11, fontWeight: 700, color: C.txt, marginBottom: 5 }}>Empirical Research Design</div>
+          <div style={{ fontFamily: F.b, fontSize: 11, color: C.txt, lineHeight: 1.65 }}>
+            Six comparative case studies (3 Top 10 pharma, 3 mid-size pharma) using the same AI-driven CI platform.
+            Cross-case analysis examines which organizational capabilities — across actors, physical resources, structures, and culture —
+            enable effective AI integration and translate into strategic impact. The study foregrounds the Capabilities dimension of the
+            CIO framework (Capabilities → Implementation → Outcomes), while using implementation patterns and outcome indicators as
+            empirical evidence for identifying which capability configurations matter most.
+            The research aims to make a dual contribution: <strong style={{ color: C.str }}>theoretically</strong>, by extending
+            Verona &amp; Ravasi's (2003) resource-based framework to the AI-driven CI context; <strong style={{ color: C.str }}>practically</strong>,
+            by deriving a capability-building roadmap that identifies which organizational investments and configurations
+            companies should prioritize to accelerate AI-driven CI adoption and realize competitive value.
+            Eisenhardt's case study method enables cross-case pattern matching across different
+            organizational configurations exposed to the same technology.
+          </div>
+        </div>
+
+        <div style={{ marginTop: 24, paddingTop: 14, borderTop: `1px solid ${C.neu}`,
+          display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: F.b, fontSize: 10, color: C.txt }}>
+          <span><strong>Bocconi University</strong> | DBA Candidate: Tarciana Caricio Carlucci | Supervisor: Gianmario Verona</span>
+          <span>Draft conceptual framework — March 2026</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

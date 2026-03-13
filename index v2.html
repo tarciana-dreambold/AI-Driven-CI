@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBA Thesis Proposal — Conceptual Framework | Tarciana Caricio Carlucci</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F5F5F5; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const { useState } = React;
+
+
+
+const C = {
+  ci: "#B22028", str: "#003366", ai: "#3F3F3F", neu: "#D9D9D9",
+  txt: "#767171", pg: "#BCBCBC", bg: "#F5F5F5", lbg: "#FAFAFA", wh: "#FFFFFF",
+  catActors: "#003366", catPhysical: "#4A7FB5", catStructures: "#8C8C8C", catCulture: "#B22028",
+};
+const F = {
+  t: "'Century Gothic','Gill Sans','Trebuchet MS',sans-serif",
+  b: "Calibri,'Trebuchet MS',sans-serif",
+};
+
+// ─── TRADITIONAL CI ───
+const traditionalSteps = [
+  { label: "Client Goals, Vision & Assumptions", sub: "Strategic context and competitive priorities defined upfront" },
+  { label: "Intelligence Requirements & Collection Plan", sub: "KITs/KIQs definition, source identification, gap analysis" },
+  { label: "Secondary + Human Collection", sub: "Conferences, patents, publications, networks" },
+  { label: "Processing & Analyzing", sub: "Validate, decompose, recombine data" },
+  { label: "CI Review & Output", sub: "Reports, presentations, briefings" },
+  { label: "Strategy", sub: "Decision-making & action" },
+];
+
+// ─── AI-DRIVEN CI ───
+const aiSteps = [
+  { label: "Client Goals, Vision & Assumptions", sub: "Strategic context codified as AI operating parameters", expansion: 1, isNew: false, zone: null,
+    detail: "Same starting point as traditional CI — understanding the client's competitive landscape, therapeutic priorities, and key assumptions. In the AI model, these get codified as monitoring parameters that direct the system." },
+  { label: "Augmented Intelligence Requirements", sub: "Broader keywords, expanded geographies, open-ended discovery", expansion: 1.4, isNew: true, zone: "landscape",
+    detail: "AI enables a fundamentally wider search space. Instead of monitoring a predefined set of competitors, the system can go broad — capturing digital entrants, international competitors, and adjacent therapeutic areas that manual processes would miss (Bouschery et al., 2023)." },
+  { label: "Continuous Scanning, Filtering & Knowledge Integration", sub: "Always-on monitoring + real-time triangulation across sources and stakeholders", expansion: 1.7, isNew: true, zone: "landscape",
+    detail: "The engine of AI-driven CI. AI continuously scans thousands of sources while simultaneously integrating signals with knowledge from internal teams and external stakeholders. Scanning and integration happen in parallel — the platform acts as a knowledge broker in real time." },
+  { label: "AI-Powered Contextualization", sub: "Custom implications, pattern recognition, sentiment analysis", expansion: 1.5, isNew: true, zone: "scenario",
+    detail: "The AI interprets each signal in the context of the client's specific competitive position. It identifies patterns across seemingly unrelated events and surfaces connections humans would miss — expanding the range of strategic options visible to the team." },
+  { label: "Scenario Exploration & Strategic Options", sub: "Wider range of options emerging from richer, integrated intelligence", expansion: 1.3, isNew: true, zone: "scenario",
+    detail: "Because the landscape is broader and knowledge is integrated from multiple stakeholders, teams can now explore a wider range of strategic scenarios than traditional CI would surface. This is where expanded intelligence translates into expanded strategic thinking." },
+  { label: "Hybrid Agency & Strategic Action", sub: "Human-AI conjoined decision-making", expansion: 1, isNew: true, zone: null,
+    detail: "Where the expanded space converges into focused strategic decisions. Hybrid agency — humans and AI jointly interpreting signals, weighing options, and committing to action. Humans set ambition and evaluate quality; AI provides speed, consistency, and pattern discovery." },
+];
+
+// ─── DYNAMIC CAPABILITIES (using standard brand colors) ───
+const capabilities = [
+  { label: "Knowledge Creation & Absorption", color: C.str,
+    desc: "How external knowledge is generated, acquired, and brought into the organization",
+    detail: "Long-term investment in knowledge generation and the ability to recognize, assimilate, and apply external knowledge. Rooted in absorptive capacity.",
+    inCI: "Present throughout CI — from defining what to look for, to scanning and collecting, to processing new signals. AI dramatically expands the volume and breadth of knowledge that can be absorbed." },
+  { label: "Knowledge Integration", color: C.ci,
+    desc: "How dispersed knowledge gets combined into coherent, actionable intelligence",
+    detail: "Cross-functional coordination, knowledge brokering, and synthesis across internal and external stakeholders. The critical bridge between knowing and acting.",
+    inCI: "Operates whenever intelligence from different sources is synthesized. In the AI model, integration is embedded in the scanning process itself — signals arrive already connected to the broader competitive picture." },
+  { label: "Knowledge Reconfiguration", color: C.ai,
+    desc: "How the organization adapts its CI practices and strategic responses over time",
+    detail: "Loose coupling, project-based flexibility, and the ability to restructure knowledge patterns. Enables the organization to evolve rather than become rigid.",
+    inCI: "Activated when intelligence leads to updated assumptions, shifted monitoring parameters, or revised strategy. The continuous learning loop makes reconfiguration ongoing rather than episodic." },
+];
+
+// ─── VERONA CATEGORIES ───
+const veronaCategories = [
+  { id: "actors", label: "Actors", color: C.catActors,
+    traditional: "CI analysts, scientists at conferences, sales reps gathering market intel, external CI firms for primary intelligence collection",
+    aiDriven: "CI platform users, brand teams, therapeutic area leads — operating along an augmentation-to-automation continuum. Humans choose how to split labor with AI. External CI firms remain essential for primary intelligence.",
+    researchQ: "How do organizations rethink the workflow and division of labor between humans and AI to optimize CI outcomes? How do actors set strategic ambition, define parameters, and evaluate quality — while leveraging AI for speed, consistency, and pattern discovery?" },
+  { id: "physical", label: "Physical Resources", color: C.catPhysical,
+    traditional: "Patent databases, market reports, conference proceedings, clinical trial databases (ClinicalTrials.gov, Citeline), biomedical literature platforms (PubMed), market intelligence platforms (IQVIA), internal paper files",
+    aiDriven: "AI platform infrastructure, integrated dashboards, real-time data pipelines, API connections to regulatory, clinical, and commercial databases",
+    researchQ: "What digital infrastructure enables knowledge absorption? How does the AI platform integrate with existing data ecosystems and legacy systems?" },
+  { id: "structures", label: "Structures & Systems", color: C.catStructures,
+    traditional: "Centralized, decentralized, or hybrid CI function; periodic review cycles; manual distribution lists; KIT/KIQ processes; functional silos",
+    aiDriven: "Automated news capture, categorization, triage, and alert sharing; cross-functional intelligence dissemination; continuous feedback loops; platform governance — with CI potentially evolving into an organizational knowledge broker",
+    researchQ: "How do organizational structure, budget allocation, and time investment shape AI-driven CI integration? What configurations enable the CI function to evolve from report production to knowledge brokerage?" },
+  { id: "culture", label: "Culture", color: C.catCulture,
+    traditional: "CI values are typically aligned with broad company values; often perceived as 'nice to have', siloed in strategy, limited executive sponsorship",
+    aiDriven: "Data-driven decision culture, trust in AI-generated insights, openness to continuous learning, willingness to update strategic assumptions, agile ways of working, accelerated decision-to-action cycles, cross-functional collaboration",
+    researchQ: "Do people trust and act on AI-generated intelligence? Is there a culture of evidence-based strategy, agility, and cross-functional collaboration that enables absorption and timely action?" },
+];
+
+// ─── COMPONENTS ───
+function SectionHeader({ color, label, citation, number }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+      {number && (
+        <div style={{ width: 26, height: 26, borderRadius: "50%", flexShrink: 0, background: color,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: F.t, fontSize: 12, fontWeight: 700, color: C.wh }}>{number}</div>
+      )}
+      <div>
+        <span style={{ fontFamily: F.t, fontSize: 12, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color }}>{label}</span>
+        {citation && <span style={{ fontFamily: F.b, fontSize: 9, color: C.pg, marginLeft: 8, fontStyle: "italic" }}>{citation}</span>}
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN ───
+function App() {
+  const [activeAiStep, setActiveAiStep] = useState(null);
+  const [activeCap, setActiveCap] = useState(null);
+  const [veronaExpanded, setVeronaExpanded] = useState(false);
+
+  const baseH = 76;
+
+  return (
+    <div style={{ background: C.bg, minHeight: "100vh", padding: "28px 20px", fontFamily: F.b, color: C.txt }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto" }}>
+
+        {/* ─── Header ─── */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+            <div style={{ width: 5, height: 52, background: C.neu, marginTop: 2 }} />
+            <div>
+              <div style={{ fontFamily: F.t, fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: C.ci, fontWeight: 600, marginBottom: 6 }}>
+                DBA Thesis Proposal — Conceptual Framework</div>
+              <h1 style={{ fontFamily: F.t, fontSize: 22, fontWeight: 700, color: C.txt, margin: "0 0 6px", lineHeight: 1.25 }}>
+                From Traditional to AI-Driven Competitive Intelligence</h1>
+              <p style={{ fontFamily: F.b, fontSize: 12, color: C.pg, margin: 0, maxWidth: 800, lineHeight: 1.55 }}>
+                What organizational capabilities enable successful AI integration in competitive intelligence?</p>
+            </div>
+          </div>
+          <div style={{ writingMode: "vertical-rl", fontFamily: F.b, fontSize: 9, color: C.ci, fontWeight: 600, letterSpacing: 1.5 }}>CONFIDENTIAL</div>
+        </div>
+
+        {/* ═══ STRATEGIC INTENT ═══ */}
+        <div style={{ background: C.wh, border: `2px solid ${C.ai}`, borderRadius: 6, padding: "20px 20px 16px", marginBottom: 20, position: "relative" }}>
+          <div style={{ position: "absolute", top: -10, left: 20, background: C.ai, padding: "2px 12px", borderRadius: 3 }}>
+            <span style={{ fontFamily: F.t, fontSize: 8, fontWeight: 700, letterSpacing: 1.2, textTransform: "uppercase", color: C.wh }}>Strategic Intent</span>
+          </div>
+          <div style={{ fontFamily: F.t, fontSize: 14, fontWeight: 700, color: C.ai, marginBottom: 6, marginTop: 2 }}>
+            Dynamic capabilities require direction
+          </div>
+          <div style={{ fontFamily: F.b, fontSize: 12, color: C.txt, lineHeight: 1.6 }}>
+            Strategic intent — the organization's goals, competitive aspirations, and working assumptions — defines what knowledge to seek,
+            how to interpret it, and when to act. This is an inherently human task: setting the ambition that activates and focuses the capabilities below.
+          </div>
+        </div>
+
+        {/* ═══ DYNAMIC CAPABILITIES FRAME ═══ */}
+        <div style={{ border: `2px solid ${C.neu}`, borderRadius: 8, padding: "16px 18px 18px", marginBottom: 20, background: `linear-gradient(180deg, ${C.bg}80, ${C.wh}40)` }}>
+
+          <div style={{ fontFamily: F.t, fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.ai, marginBottom: 6 }}>
+            Dynamic Capabilities — Three Knowledge Processes
+            <span style={{ fontFamily: F.b, fontSize: 9, fontWeight: 400, fontStyle: "italic", color: C.pg, textTransform: "none", letterSpacing: 0, marginLeft: 8 }}>
+              Verona & Ravasi, 2003 — operating throughout the CI process</span>
+          </div>
+
+          {/* Capability cards — no dots, brand colors */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 18 }}>
+            {capabilities.map((cap, i) => {
+              const isActive = activeCap === i;
+              return (
+                <div key={i} onClick={() => setActiveCap(isActive ? null : i)} style={{
+                  background: isActive ? `${cap.color}06` : C.wh,
+                  border: `1.5px solid ${isActive ? cap.color : C.neu}`,
+                  borderRadius: 5, padding: "10px 12px", cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  boxShadow: isActive ? `0 2px 10px ${cap.color}15` : "0 1px 4px rgba(0,0,0,0.06)" }}>
+                  <div style={{ fontFamily: F.t, fontSize: 11, fontWeight: 700, color: isActive ? cap.color : C.txt, marginBottom: 4 }}>
+                    {cap.label}
+                  </div>
+                  <div style={{ fontFamily: F.b, fontSize: 10, color: C.pg, lineHeight: 1.4 }}>{cap.desc}</div>
+                  {isActive && (
+                    <div style={{ marginTop: 8 }}>
+                      <div style={{ fontFamily: F.b, fontSize: 10, color: C.txt, lineHeight: 1.45, marginBottom: 6 }}>{cap.detail}</div>
+                      <div style={{ padding: "6px 8px", background: C.bg, borderRadius: 3, borderLeft: `3px solid ${cap.color}` }}>
+                        <div style={{ fontFamily: F.t, fontSize: 8, fontWeight: 700, color: cap.color, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 2 }}>
+                          How it manifests in CI</div>
+                        <div style={{ fontFamily: F.b, fontSize: 10, color: C.txt, lineHeight: 1.4 }}>{cap.inCI}</div>
+                      </div>
+                    </div>
+                  )}
+                  {!isActive && <div style={{ fontFamily: F.b, fontSize: 9, color: C.pg, fontStyle: "italic", marginTop: 3 }}>Click to explore</div>}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* ─── CI FLOWS ─── */}
+          <div style={{ background: C.wh, borderRadius: 6, padding: "14px 14px 10px", border: `1px solid ${C.neu}` }}>
+
+            {/* TRADITIONAL */}
+            <SectionHeader color={C.ci} label="Traditional CI Process" citation="Adapted from Carlucci, Page & Finegold, 2005" number="1" />
+            <div style={{ position: "relative", marginBottom: 34 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, alignItems: "center" }}>
+                {traditionalSteps.map((step, i) => (
+                  <div key={i} style={{ background: C.wh, border: `1.5px solid ${C.neu}`, borderRadius: 5,
+                    padding: "8px 6px", textAlign: "center", height: baseH,
+                    display: "flex", flexDirection: "column", justifyContent: "center",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+                    <div style={{ fontFamily: F.b, fontSize: 10, fontWeight: 700, lineHeight: 1.2, marginBottom: 2, color: C.txt }}>{step.label}</div>
+                    <div style={{ fontFamily: F.b, fontSize: 8, color: C.pg, lineHeight: 1.2 }}>{step.sub}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ position: "absolute", bottom: -18, left: "14%", right: "14%", height: 14,
+                borderBottom: `1.5px dashed ${C.pg}`, borderLeft: `1.5px dashed ${C.pg}`, borderRight: `1.5px dashed ${C.pg}`,
+                borderRadius: "0 0 8px 8px" }}>
+                <div style={{ position: "absolute", left: -4, top: -4, color: C.pg, fontSize: 8 }}>▲</div>
+                <div style={{ position: "absolute", bottom: -10, left: "50%", transform: "translateX(-50%)",
+                  fontFamily: F.b, fontSize: 7, color: C.pg, whiteSpace: "nowrap" }}>
+                  Periodic feedback — additional collection if gaps remain</div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, margin: "20px 0 14px" }}>
+              <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, ${C.str}40)` }} />
+              <span style={{ fontFamily: F.t, fontSize: 9, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.str }}>AI Transformation</span>
+              <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, ${C.str}40)` }} />
+            </div>
+
+            {/* AI-DRIVEN */}
+            <SectionHeader color={C.str} label="Atacana AI-Driven CI Process" citation="Expanded problem & solution spaces (Bouschery et al., 2023)" number="2" />
+
+            <div style={{ position: "relative", marginBottom: 34 }}>
+              {/* Zone labels */}
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, padding: "0 4px" }}>
+                <div style={{ width: "16.5%" }} />
+                <div style={{ width: "33%", textAlign: "center" }}>
+                  <span style={{ fontFamily: F.t, fontSize: 8, fontWeight: 700, color: C.str, letterSpacing: 1, opacity: 0.6 }}>
+                    ← EXPANDED LANDSCAPE →</span>
+                </div>
+                <div style={{ width: "1%" }} />
+                <div style={{ width: "33%", textAlign: "center" }}>
+                  <span style={{ fontFamily: F.t, fontSize: 8, fontWeight: 700, color: C.str, letterSpacing: 1, opacity: 0.6 }}>
+                    ← EXPANDED SCENARIO PLANNING →</span>
+                </div>
+                <div style={{ width: "16.5%" }} />
+              </div>
+
+              {/* Step cards with contained background highlights */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, alignItems: "center" }}>
+                {aiSteps.map((step, i) => {
+                  const isActive = activeAiStep === i;
+                  const h = baseH * step.expansion;
+                  const isExpanded = step.expansion > 1;
+                  return (
+                    <div key={i} onClick={() => setActiveAiStep(isActive ? null : i)} style={{
+                      background: isActive ? `${C.str}10` : isExpanded ? `${C.str}04` : C.wh,
+                      border: `1.5px solid ${isActive ? C.str : step.isNew ? `${C.str}70` : C.neu}`,
+                      borderRadius: 5, padding: "8px 6px", textAlign: "center",
+                      height: h, cursor: "pointer", position: "relative",
+                      display: "flex", flexDirection: "column", justifyContent: "center",
+                      transition: "all 0.3s ease",
+                      boxShadow: isActive ? `0 2px 10px ${C.str}18` : isExpanded ? `0 1px 8px ${C.str}10` : "0 1px 3px rgba(0,0,0,0.06)" }}>
+                      {step.isNew && (
+                        <div style={{ position: "absolute", top: -7, right: 5, fontFamily: F.t, fontSize: 5.5, fontWeight: 700,
+                          letterSpacing: 1, textTransform: "uppercase", color: C.wh, background: C.ci, padding: "1px 4px", borderRadius: 2 }}>New</div>
+                      )}
+                      <div style={{ fontFamily: F.b, fontSize: 10, fontWeight: 700, lineHeight: 1.2, marginBottom: 2,
+                        color: isActive ? C.str : C.txt }}>{step.label}</div>
+                      <div style={{ fontFamily: F.b, fontSize: 8, color: C.pg, lineHeight: 1.2 }}>{step.sub}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Continuous loop — more space */}
+              <div style={{ position: "absolute", bottom: -22, left: "6%", right: "6%", height: 18,
+                borderBottom: `2px solid ${C.str}`, borderLeft: `2px solid ${C.str}`, borderRight: `2px solid ${C.str}`,
+                borderRadius: "0 0 10px 10px" }}>
+                <div style={{ position: "absolute", left: -4, top: -5, color: C.str, fontSize: 9 }}>▲</div>
+                <div style={{ position: "absolute", right: -4, top: -5, color: C.str, fontSize: 9, transform: "scaleX(-1)" }}>▲</div>
+                <div style={{ position: "absolute", bottom: -13, left: "50%", transform: "translateX(-50%)",
+                  fontFamily: F.b, fontSize: 9, color: C.str, whiteSpace: "nowrap", fontWeight: 600 }}>
+                  Continuous, bidirectional learning loop — system adapts dynamically with every interaction</div>
+              </div>
+            </div>
+
+            {/* Detail panel */}
+            {activeAiStep !== null && (
+              <div style={{ marginTop: 38, padding: "12px 16px", background: C.wh, borderRadius: 5,
+                border: `1.5px solid ${C.str}`, borderLeft: `4px solid ${C.str}`,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+                <div style={{ fontFamily: F.t, fontSize: 12, fontWeight: 700, color: C.str, marginBottom: 4 }}>
+                  {aiSteps[activeAiStep].label}</div>
+                <div style={{ fontFamily: F.b, fontSize: 11, color: C.txt, lineHeight: 1.6 }}>
+                  {aiSteps[activeAiStep].detail}</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ═══ ORGANIZATIONAL RESOURCES ═══ */}
+        <div style={{ marginBottom: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 12 }}>
+            <div style={{ flex: 1, height: 1, background: C.neu }} />
+            <span style={{ fontFamily: F.t, fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: C.ai }}>
+              Enabled by organizational resources</span>
+            <div style={{ flex: 1, height: 1, background: C.neu }} />
+          </div>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+          <SectionHeader color={C.ci} label="Organizational Resource Categories"
+            citation="Verona & Ravasi, 2003 — the foundation that determines capability strength" number="3" />
+          <button onClick={() => setVeronaExpanded(!veronaExpanded)} style={{
+            fontFamily: F.b, fontSize: 10, color: C.str, background: "none", border: `1px solid ${C.str}`,
+            borderRadius: 4, padding: "4px 12px", cursor: "pointer" }}>
+            {veronaExpanded ? "Collapse all" : "Expand all"}
+          </button>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+          {veronaCategories.map((cat) => (
+            <div key={cat.id} onClick={() => setVeronaExpanded(!veronaExpanded)} style={{
+              background: veronaExpanded ? `${cat.color}04` : C.wh,
+              border: `1.5px solid ${veronaExpanded ? cat.color : C.neu}`,
+              borderRadius: 6, overflow: "hidden", cursor: "pointer",
+              transition: "all 0.2s ease",
+              boxShadow: veronaExpanded ? `0 2px 10px ${cat.color}10` : "0 1px 4px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: cat.color, padding: "6px 12px" }}>
+                <span style={{ fontFamily: F.t, fontSize: 12, fontWeight: 700, color: C.wh }}>{cat.label}</span>
+              </div>
+              <div style={{ padding: "10px 12px" }}>
+                {!veronaExpanded ? (
+                  <div style={{ fontFamily: F.b, fontSize: 10, color: C.pg }}>Click to explore traditional vs. AI-driven</div>
+                ) : (
+                  <div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+                      <div>
+                        <div style={{ fontFamily: F.b, fontSize: 8, fontWeight: 700, letterSpacing: 0.8, textTransform: "uppercase",
+                          color: C.ci, marginBottom: 3, display: "flex", alignItems: "center", gap: 4 }}>
+                          <div style={{ width: 10, height: 2, background: C.ci, borderRadius: 1 }} />Traditional</div>
+                        <div style={{ fontFamily: F.b, fontSize: 10, color: C.txt, lineHeight: 1.45 }}>{cat.traditional}</div>
+                      </div>
+                      <div>
+                        <div style={{ fontFamily: F.b, fontSize: 8, fontWeight: 700, letterSpacing: 0.8, textTransform: "uppercase",
+                          color: C.str, marginBottom: 3, display: "flex", alignItems: "center", gap: 4 }}>
+                          <div style={{ width: 10, height: 2, background: C.str, borderRadius: 1 }} />AI-Driven</div>
+                        <div style={{ fontFamily: F.b, fontSize: 10, color: C.txt, lineHeight: 1.45 }}>{cat.aiDriven}</div>
+                      </div>
+                    </div>
+                    <div style={{ padding: "6px 8px", background: C.lbg, borderRadius: 3, borderLeft: `2px solid ${cat.color}` }}>
+                      <div style={{ fontFamily: F.t, fontSize: 7, fontWeight: 700, letterSpacing: 0.8, textTransform: "uppercase", color: cat.color, marginBottom: 2 }}>Research Question</div>
+                      <div style={{ fontFamily: F.b, fontSize: 9, color: C.txt, lineHeight: 1.4, fontStyle: "italic" }}>{cat.researchQ}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ─── Key Insight ─── */}
+        <div style={{ marginTop: 24, padding: "14px 18px", background: C.wh, borderRadius: 6,
+          border: `1.5px solid ${C.str}`, borderLeft: `5px solid ${C.ci}`,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+          <div style={{ fontFamily: F.t, fontSize: 13, fontWeight: 700, color: C.ci, marginBottom: 6 }}>
+            The Key Shift: From Constrained Search to Expanded Landscape & Scenario Planning
+          </div>
+          <div style={{ fontFamily: F.b, fontSize: 12, color: C.txt, lineHeight: 1.65, maxWidth: 960 }}>
+            Traditional CI operates within a <strong style={{ color: C.ci }}>predefined, narrow search space</strong> —
+            known competitors, fixed keywords, periodic collection. AI-driven CI expands in two dimensions:
+            the <strong style={{ color: C.str }}>competitive landscape</strong> (more signals, broader geographies, unexpected entrants) and
+            the <strong style={{ color: C.str }}>strategic scenario space</strong> (richer intelligence enables a wider range of options before committing to action).
+            The three dynamic capabilities operate throughout this process — but whether they function well depends on the organization's underlying resources.
+          </div>
+        </div>
+
+        {/* ─── Research Design ─── */}
+        <div style={{ marginTop: 10, padding: "12px 16px", background: C.bg, borderRadius: 4, border: `1px solid ${C.neu}` }}>
+          <div style={{ fontFamily: F.t, fontSize: 11, fontWeight: 700, color: C.txt, marginBottom: 4 }}>Empirical Research Design</div>
+          <div style={{ fontFamily: F.b, fontSize: 11, color: C.txt, lineHeight: 1.55 }}>
+            Six comparative case studies (3 Top 10 pharma, 3 mid-size pharma) using the same AI-driven CI platform.
+            Cross-case analysis examines which organizational capabilities enable effective AI integration and translate into strategic impact.
+            Eisenhardt's (1989) case study method enables cross-case pattern matching across different organizational configurations exposed to the same technology.
+          </div>
+        </div>
+
+        {/* ─── Footer ─── */}
+        <div style={{ marginTop: 18, paddingTop: 12, borderTop: `1px solid ${C.neu}`,
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          fontFamily: F.b, fontSize: 10, color: C.txt }}>
+          <span><strong>Bocconi University</strong> | DBA Candidate: Tarciana Caricio Carlucci | Supervisor: Gianmario Verona</span>
+          <span>Draft conceptual framework — March 2026</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
